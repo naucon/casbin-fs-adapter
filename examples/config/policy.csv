@@ -1,0 +1,11 @@
+p, role_user_read, /user, GET, allow
+p, role_user_write, /user, POST, allow
+p, role_user_read, /user/:id, GET, allow
+p, role_user_write, /user/:id, PATCH, allow
+p, *, /sign-in, *, allow
+p, *, /, *, allow
+p, *, /*, *, deny
+
+g, admin, role_user_read
+g, admin, role_user_write
+
