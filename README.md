@@ -128,4 +128,4 @@ func main() {
 
 ## License
 
-This project is licensed under the MIT license. See the (LICENSE)[https://github.com/naucon/casbin-fs-adapter/blob/master/LICENSE] file for the full license text.
+This project is licensed under the MIT license. See the [LICENSE](https://github.com/naucon/casbin-fs-adapter/blob/master/LICENSE) file for the full license text.
