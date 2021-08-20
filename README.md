@@ -1,9 +1,12 @@
-# FS Adapter for casbin
+# FS Adapter for Casbin
 
-This package is a FileSystem adapter for [Casbin](https://github.com/casbin/casbin) v2.
-The adapter enables [Casbin](https://github.com/casbin/casbin) to load policies and models from FileSystem interface including embed.FS.
+[![Build](https://github.com/naucon/casbin-fs-adapter/actions/workflows/go-ci.yml/badge.svg?branch=develop)](https://github.com/naucon/casbin-fs-adapter/actions/workflows/go-ci.yml)
+[![Coverage](https://codecov.io/gh/naucon/casbin-fs-adapter/branch/develop/graph/badge.svg?token=NULWRXK18L)](https://codecov.io/gh/naucon/casbin-fs-adapter)
 
-**NOTICE:** Adapter is readonly, writing or AutoSave is not supported.
+This package is a file system adapter for [Casbin](https://github.com/casbin/casbin) v2.
+The adapter enables [Casbin](https://github.com/casbin/casbin) to load policies and models from fs.FS interface including support for embed.FS.
+
+**NOTICE:** because fs.FS is readonly, writing operations and AutoSave are not supported.
 
 ## Installation
 
@@ -11,9 +14,51 @@ install the latest version via go get
 
   go get -u github.com/naucon/casbin-fs-adapter
 
+## Import package
+
+  import casbin_fs_adapter "github.com/naucon/casbin-fs-adapter"
+
 ## Usage
 
-Here is a basic example for using this package:
+### Policy
+
+This Adapter implements the Casbin storage policy adapter interface and can be injected into the Casbin Enforcer.
+To inject the storage adapter, create an instance with `casbin_fs_adapter.NewAdapter()`. Pass in the filesystem and file path.
+
+```
+	fsys := os.DirFS("config")
+	policies := casbin_fs_adapter.NewAdapter(fsys, "policy.csv")
+	enforcer, _ := casbin.NewEnforcer("config/casbin_model.conf", policies)
+```
+
+### Model
+
+Currently, Casbin has no storage adapter interface for model configuration. However, the model can be created and injected into the casbin Enforcer.
+To create a model call `casbin_fs_adapter.NewModel()`, pass in the filesystem and file path.
+
+```
+	fsys := os.DirFS("config")
+	model, _ := casbin_fs_adapter.NewModel(fsys, "casbin_model.conf")
+	policies := casbin_fs_adapter.NewAdapter(fsys, "policy.csv")
+	enforcer, _ := casbin.NewEnforcer(model, policies)
+```
+
+### Embed
+
+Since go version 1.16 we can embed files into our binaries with embed.FS. Because it implements the fs.FS interface we can use it in our adapter too.
+
+```
+  //go:embed config/model.conf config/policy.csv
+  var f embed.FS
+
+  func main() {
+      model, _ := casbin_fs_adapter.NewModel(EmbeddedFiles, "config/model.conf")
+      policies := casbin_fs_adapter.NewAdapter(EmbeddedFiles, "config/policy.csv")
+    	enforcer, _ := casbin.NewEnforcer(model, policies)
+  }
+```
+
+## Example
 
 ````
 package main
@@ -28,7 +73,7 @@ import (
 
 func main() {
 	fsys := os.DirFS("config")
-	model, _ := casbin_fs_adapter.NewModel(fsys, "casbin_model.conf")
+	model, _ := casbin_fs_adapter.NewModel(fsys, "model.conf")
 	policies := casbin_fs_adapter.NewAdapter(fsys, "policy.csv")
 	enforcer, _ := casbin.NewEnforcer(model, policies)
 
@@ -59,11 +104,11 @@ import (
 	"github.com/casbin/casbin/v2"
 )
 
-//go:embed config/casbin_model.conf config/policy.csv
+//go:embed config/model.conf config/policy.csv
 var f embed.FS
 
 func main() {
-	model, _ := casbin_fs_adapter.NewModel(EmbeddedFiles, "config/casbin_model.conf")
+	model, _ := casbin_fs_adapter.NewModel(EmbeddedFiles, "config/model.conf")
 	policies := casbin_fs_adapter.NewAdapter(EmbeddedFiles, "config/policy.csv")
 	enforcer, _ := casbin.NewEnforcer(model, policies)
 
@@ -83,4 +128,4 @@ func main() {
 
 ## License
 
-This project is licensed under the MIT license. See the LICENSE file for the full license text.
+This project is licensed under the MIT license. See the (LICENSE)[https://github.com/naucon/casbin-fs-adapter/blob/master/LICENSE] file for the full license text.
