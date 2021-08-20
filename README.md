@@ -1,7 +1,7 @@
 # FS Adapter for Casbin
 
 [![Build](https://github.com/naucon/casbin-fs-adapter/actions/workflows/go-ci.yml/badge.svg)](https://github.com/naucon/casbin-fs-adapter/actions/workflows/go-ci.yml)
-[![Coverage](https://codecov.io/gh/naucon/casbin-fs-adapter/branch/develop/graph/badge.svg)](https://codecov.io/gh/naucon/casbin-fs-adapter)
+[![Coverage](https://codecov.io/gh/naucon/casbin-fs-adapter/branch/develop/graph/badge.svg?token=YQ5BQU03PE)](https://codecov.io/gh/naucon/casbin-fs-adapter)
 
 This package is a file system adapter for [Casbin](https://github.com/casbin/casbin) v2.
 The adapter enables [Casbin](https://github.com/casbin/casbin) to load policies and models from fs.FS interface including support for embed.FS.
