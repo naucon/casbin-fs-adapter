@@ -16,11 +16,17 @@ The adapter enables [Casbin](https://github.com/casbin/casbin) to load policies 
 
 install the latest version via go get
 
-  go get -u github.com/naucon/casbin-fs-adapter
+```
+go get -u github.com/naucon/casbin-fs-adapter
+```
 
 ## Import package
 
-  import casbin_fs_adapter "github.com/naucon/casbin-fs-adapter"
+```
+import (
+  casbin_fs_adapter "github.com/naucon/casbin-fs-adapter"
+)
+```
 
 ## Usage
 
