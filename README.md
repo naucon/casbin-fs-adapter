@@ -8,6 +8,10 @@ The adapter enables [Casbin](https://github.com/casbin/casbin) to load policies 
 
 **NOTICE:** because fs.FS is readonly, writing operations and AutoSave are not supported.
 
+## Requires
+
+* Go 1.16 or newer
+
 ## Installation
 
 install the latest version via go get
@@ -45,7 +49,9 @@ To create a model call `casbin_fs_adapter.NewModel()`, pass in the filesystem an
 
 ### Embed
 
-Since go version 1.16 we can embed files into our binaries with embed.FS. Because it implements the fs.FS interface we can use it in our adapter too.
+With go:embed we can embed files and directories into application binaries at compile-time.
+Embedded directories or multiple files can be access through a variable of type `embed.FS`.
+Because `embed.FS` implements the `fs.FS` interface, we can use it in our adapter too.
 
 ```
   //go:embed config/model.conf config/policy.csv
@@ -91,7 +97,7 @@ func main() {
 }
 ````
 
-## Example with embed (go1.16+)
+## Example with embed
 
 ````
 package main
