@@ -3,10 +3,11 @@ package fsadapter
 import (
 	"bufio"
 	"errors"
-	"github.com/casbin/casbin/v2/model"
-	"github.com/casbin/casbin/v2/persist"
 	"io/fs"
 	"strings"
+
+	"github.com/casbin/casbin/v2/model"
+	"github.com/casbin/casbin/v2/persist"
 )
 
 type Adapter struct {
@@ -26,7 +27,7 @@ func (a *Adapter) LoadPolicy(model model.Model) error {
 	return a.loadPolicyFile(model, persist.LoadPolicyLine)
 }
 
-func (a *Adapter) loadPolicyFile(model model.Model, handler func(string, model.Model)) error {
+func (a *Adapter) loadPolicyFile(model model.Model, handler func(string, model.Model) error) error {
 	f, err := a.fsys.Open(a.filePath)
 	if err != nil {
 		return err
@@ -36,7 +37,10 @@ func (a *Adapter) loadPolicyFile(model model.Model, handler func(string, model.M
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
-		handler(line, model)
+		err = handler(line, model)
+		if err != nil {
+			return err
+		}
 	}
 	return scanner.Err()
 }
